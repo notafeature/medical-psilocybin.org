@@ -1,0 +1,24 @@
+// The hub at medical-psilocybin.org: static assets served by a Cloudflare Worker
+// with no code of its own. Its own project, its own name, its own repository,
+// so it can never collide with the counter Worker (nmmpab-count) that the rules
+// repository deploys; see OPERATIONS.md there, Part 5.
+//
+// Deploy: npx wrangler@4 deploy --config ./wrangler.jsonc
+// Wrangler creates the custom domains and their DNS records in the zone.
+{
+  "name": "medical-psilocybin-hub",
+  "compatibility_date": "2026-07-01",
+  // The personal Cloudflare account, the same one that holds the zone.
+  "account_id": "2418db2ff3f95726c374a86551d2436e",
+  "workers_dev": false,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./public",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "routes": [
+    { "pattern": "medical-psilocybin.org", "custom_domain": true },
+    { "pattern": "www.medical-psilocybin.org", "custom_domain": true }
+  ]
+}
