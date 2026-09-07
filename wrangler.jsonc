@@ -4,7 +4,7 @@
 // repository deploys; see OPERATIONS.md there, Part 5.
 //
 // Deploy: npx wrangler@4 deploy --config ./wrangler.jsonc
-// Wrangler creates the custom domains and their DNS records in the zone.
+// The DNS records the routes ride on already exist in the zone.
 {
   "name": "medical-psilocybin-hub",
   "compatibility_date": "2026-07-01",
@@ -17,8 +17,12 @@
     "not_found_handling": "404-page",
     "html_handling": "auto-trailing-slash"
   },
+  // Zone routes over the zone's proxied placeholder records for the apex and www
+  // (A records to 192.0.2.0): the Worker answers every request on either host and
+  // the placeholder origin is never contacted. Custom domains would need those
+  // records deleted first, which the deploy credentials cannot do.
   "routes": [
-    { "pattern": "medical-psilocybin.org", "custom_domain": true },
-    { "pattern": "www.medical-psilocybin.org", "custom_domain": true }
+    { "pattern": "medical-psilocybin.org/*", "zone_name": "medical-psilocybin.org" },
+    { "pattern": "www.medical-psilocybin.org/*", "zone_name": "medical-psilocybin.org" }
   ]
 }
